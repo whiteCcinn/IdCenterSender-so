@@ -2,7 +2,7 @@
 
 ### PHP语言实现版本
 
-- [IdCenterSender - PHP原生版本](https://github.com/whiteCcinn/IdCenterSender-so)
+- [IdCenterSender - PHP原生版本](https://github.com/whiteCcinn/IdCenterSender)
 
 分布式64位ID发号器,PHP扩展版本
 
