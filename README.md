@@ -2,7 +2,7 @@
 
 ### PHP语言实现版本
 
-- [IdCenterSender.so - PHP扩展版本](https://github.com/whiteCcinn/IdCenterSender-so)
+- [IdCenterSender - PHP原生版本](https://github.com/whiteCcinn/IdCenterSender-so)
 
 分布式64位ID发号器,PHP扩展版本
 
@@ -27,7 +27,7 @@
 
 ## 扩展的形式特点-唯一性保证：
 - 结合自旋锁+共享内存实现的高并发ID发号
-- 安装扩展之后，无需额外的类图，直接调用PHP的接口 `ck_get_id()` 即可。
+- 安装扩展之后，无需额外的类库，直接调用PHP的接口 `ck_get_id()` 即可。
 
 
 ## 安装步骤
