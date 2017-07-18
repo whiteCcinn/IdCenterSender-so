@@ -7,7 +7,12 @@
 // Otherwise, use ARG_ENABLE
 // ARG_ENABLE("cckeyid", "enable cckeyid support", "no");
 
+  cckeyid_source_file="cckeyid.c \
+        src/cckeyid.c \
+        src/shm.c \
+        src/spinlock.c"
+
 if (PHP_CCKEYID != "no") {
-	EXTENSION("cckeyid", "cckeyid.c", PHP_EXTNAME_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
+	EXTENSION("cckeyid", $cckeyid_source_file, PHP_EXTNAME_SHARED, "/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1");
 }
 

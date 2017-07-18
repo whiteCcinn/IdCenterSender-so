@@ -12,7 +12,7 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author:Caiwenhui 471113744@qq.com                                    |
+  | Author:caiwenhui 471113744@qq.com                                    |
   +----------------------------------------------------------------------+
 */
 
@@ -47,7 +47,7 @@ extern zend_module_entry cckeyid_module_entry;
 
 
 // [user] this is my define function
-PHP_FUNCTOIN(ck_get_id);
+PHP_FUNCTION(ck_get_id);
 
 
 /*

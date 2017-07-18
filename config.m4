@@ -7,9 +7,9 @@ dnl without editing.
 
 dnl If your extension references something external, use with:
 
-dnl PHP_ARG_WITH(cckeyid, for cckeyid support,
+PHP_ARG_WITH(cckeyid, for cckeyid support,
 dnl Make sure that the comment is aligned:
-dnl [  --with-cckeyid             Include cckeyid support])
+[  --with-cckeyid             Include cckeyid support])
 
 dnl Otherwise use enable:
 
@@ -59,5 +59,10 @@ if test "$PHP_CCKEYID" != "no"; then
   dnl
   dnl PHP_SUBST(CCKEYID_SHARED_LIBADD)
 
-  PHP_NEW_EXTENSION(cckeyid, cckeyid.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  cckeyid_source_file="cckeyid.c \
+        src/cckeyid.c \
+        src/shm.c \
+        src/spinlock.c"
+
+  PHP_NEW_EXTENSION(cckeyid, $cckeyid_source_file, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi

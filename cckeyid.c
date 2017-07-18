@@ -25,6 +25,7 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
+#include "src/cckeyid.h"
 #include "php_cckeyid.h"
 
 /* If you declare any globals in php_cckeyid.h uncomment this:*/
@@ -47,8 +48,8 @@ PHP_INI_END()
  * because of us use the php.ini the options info,so we must be invoke this api 
  */
 PHP_INI_BEGIN()
-    STD_PHP_INI_ENTRY("cckeyid.node_id","0", PHP_INI_ALL, OnUpdateInt, global_value, zend_cckeyid_globals, cckeyid_globals)
-    STD_PHP_INI_ENTRY("cckeyid.epoch", "0", PHP_INI_ALL, OnUpdateLong, global_string, zend_cckeyid_globals, cckeyid_globals)
+    STD_PHP_INI_ENTRY("cckeyid.node_id","0", PHP_INI_ALL, OnUpdateLong, ck_node_id, zend_cckeyid_globals, cckeyid_globals)
+    STD_PHP_INI_ENTRY("cckeyid.epoch", "0", PHP_INI_ALL, OnUpdateLong, ck_epoch, zend_cckeyid_globals, cckeyid_globals)
 PHP_INI_END()
 
 
@@ -99,7 +100,10 @@ PHP_MINIT_FUNCTION(cckeyid)
 {
 	/* If you have INI entries, uncomment these lines */
 	REGISTER_INI_ENTRIES();
-	
+	if (cckeyid_init() == -1){
+            return FAILURE;
+    }
+    atexit(cckeyid_shutdown);
 	return SUCCESS;
 }
 /* }}} */
@@ -110,6 +114,7 @@ PHP_MSHUTDOWN_FUNCTION(cckeyid)
 {
 	/* uncomment this line if you have INI entries */
 	UNREGISTER_INI_ENTRIES();
+	cckeyid_shutdown();
 	return SUCCESS;
 }
 /* }}} */
@@ -141,8 +146,9 @@ PHP_MINFO_FUNCTION(cckeyid)
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Cckeyid support", "enabled");
-        php_info_print_table_row(2, "Version", PHP_CCKEYID_VERSION);
-        php_info_print_table_row(2, "Author", "wenhui.cai[email:471113744@qq.com]");
+    php_info_print_table_row(2, "Version", PHP_CCKEYID_VERSION);
+    php_info_print_table_row(2, "Author", "wenhui.cai[email:471113744@qq.com]");
+    php_info_print_table_row(2, "Comment","The Cckeyid service starts with version 1.0.0");
 	php_info_print_table_end();
 
 	/* Remove comments if you have entries in php.ini
@@ -157,10 +163,21 @@ PHP_MINFO_FUNCTION(cckeyid)
  */
 const zend_function_entry cckeyid_functions[] = {
 	PHP_FE(confirm_cckeyid_compiled,	NULL)		/* For testing, remove later. */
-        PHP_FE(ck_get_id,NULL)
+    PHP_FE(ck_get_id,NULL)
 	PHP_FE_END	/* Must be the last line in cckeyid_functions[] */
 };
 /* }}} */
+
+PHP_FUNCTION(ck_get_id)
+{
+    char buffer[64];
+    int len;
+    int node_id =  CCKEYID_G(ck_node_id);
+    time_t epoch = CCKEYID_G(ck_epoch);
+    uint64_t cckeyid = cckeyid_next_id(node_id,epoch);
+    len = sprintf(buffer, "%"PRIu64, cckeyid);
+    RETURN_STRINGL(buffer,len);
+}
 
 /* {{{ cckeyid_module_entry
  */
